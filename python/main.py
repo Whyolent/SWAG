@@ -1,3 +1,5 @@
+#I can't figure out how to get requests imported on a normal computer, only on replit
+#So this code won't work outside of replit for now
 import requests
 import datetime
 import base64
@@ -42,6 +44,7 @@ class SpotifyAPI(object):
       "grant_type": "client_credentials"
     }
 
+  # Recieves+defines access token to use for requests
   def perform_auth(self): 
     token_url = self.token_url
     token_data = self.get_token_data()
@@ -53,7 +56,6 @@ class SpotifyAPI(object):
 
     # Handling response data
     data = r.json()
-    print(type(data))
     now = datetime.datetime.now()
     access_token = data.get("access_token")
     expires_in = data.get("expires_in")
@@ -64,18 +66,23 @@ class SpotifyAPI(object):
     return True
 
 spotify = SpotifyAPI(client_id, client_secret)
-print(spotify.perform_auth())
+spotify.perform_auth()
 access_token = spotify.access_token
 
 #Searching for a track
-
+track = input("Enter the Spotify link to a song: ")
+trackID = track[31:53]
 
 headers = {
   "Authorization": f"Bearer {access_token}"
 }
-endpoint = "https://api.spotify.com/v1/search"
-data = urlencode({"q": "Loretta,City Slicker,Ginger Root", "type": "track,album,artist", "market": "US"})
-lookup_url = f"{endpoint}?{data}"
+endpoint = "https://api.spotify.com/v1/tracks"
+lookup_url = f"{endpoint}/{trackID}?market=US"
 r = requests.get(lookup_url, headers=headers)
-print(r.status_code)
-print(r.json())
+songData = r.json()
+songName = songData.get("name")
+songAlbumData = songData.get("album")
+songArtistData = songAlbumData.get("artists")
+songArtist = songArtistData[0].get("name")
+
+print("That's the link to",songName,"by",songArtist,"!")
