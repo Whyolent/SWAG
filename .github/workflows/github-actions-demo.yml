@@ -1,0 +1,6 @@
+name: GitHub Actions Demo
+on: [push]
+jobs:
+  env:
+    SPOTIFY_CLIENT_ID: "ebc5f039ff4446ebb9a4258dfd82a0d4"
+    SPOTIFY_CLIENT_SECRET: "976722a6815e4e0184a4cf59c0039755"
